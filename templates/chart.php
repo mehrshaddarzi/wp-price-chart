@@ -2,31 +2,12 @@
 	<?php
 	global $wpdb;
 
-	//Label
 	$label = array();
 	$data = array();
-	$first_start = $current_time_5_ago - ( 60 * WP_PRICE_CHART::$option['wp_price_chart_opt']['update_time'] );
-	$i = 1;
-	while ( true ) {
-		if ( $first_start + ( 60 * WP_PRICE_CHART::$option['wp_price_chart_opt']['update_time'] * $i ) >= $current_time ) {
-			break;
-		}
-
-		// Create Label
-		$label[] = date( "H:i", $first_start + ( 60 * WP_PRICE_CHART::$option['wp_price_chart_opt']['update_time'] * $i ) );
-
-		// Get Price Data
-		$d        = 0;
-		$from_sql = ( $first_start + ( 60 * WP_PRICE_CHART::$option['wp_price_chart_opt']['update_time'] * ( $i - 1 ) ) - 1 ) * 1000;
-		$to_sql   = ( $first_start + ( 60 * WP_PRICE_CHART::$option['wp_price_chart_opt']['update_time'] * $i ) ) * 1000;
-		$get      = $wpdb->get_var( "SELECT `LASTSALEPRICE` FROM `{$wpdb->prefix}prices` WHERE `LASTSALETIME` BETWEEN {$from_sql} AND {$to_sql}" );
-		//echo "SELECT `LASTSALEPRICE` FROM `{$wpdb->prefix}prices` WHERE `LASTSALETIME` BETWEEN {$from_sql} AND {$to_sql}";
-
-        if ( ! empty( $get ) ) {
-			$d = $get;
-		}
-		$data[] = $d;
-		$i ++;
+	$query = $wpdb->get_results( "SELECT `LASTSALEPRICE`, `LASTSALETIME` FROM `{$wpdb->prefix}prices` WHERE `LASTSALETIME` BETWEEN {$current_time_x_ago}000 AND {$current_time}000", ARRAY_A );
+	foreach ( $query as $row ) {
+		$label[] = date( "d M H:i",  $row['LASTSALETIME'] / 1000 );
+		$data[]  = $row['LASTSALEPRICE'];
 	}
 
 	?>

@@ -87,7 +87,23 @@ jQuery(document).ready(function ($) {
                         }
                     }]
                 }
+            },
+            plugins: [{
+            afterDraw: function (chart) {
+                if (chart.data.datasets[0].data.every(x => x == 0) === true) {
+                    let ctx = chart.chart.ctx;
+                    let width = chart.chart.width;
+                    let height = chart.chart.height;
+                    chart.clear();
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = "16px normal 'tahoma'";
+                    ctx.fillText('No data available', width / 2, height / 2);
+                    ctx.restore();
+                }
             }
+        }]
         });
     };
 

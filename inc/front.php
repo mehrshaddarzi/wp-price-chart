@@ -73,28 +73,15 @@ class Front {
 		wp_enqueue_script( self::$asset_name );
 
 		// Get From and to
-		// Get time
 		$current_time = current_time( 'timestamp' );
-
-		// Round Hour
-		$current_time_round = strtotime( date( 'Y-m-d H:00:00', $current_time ) );
-
-		// get x ago
-		$current_time_5_ago = $current_time_round - ( 3600 * WP_PRICE_CHART::$option['wp_price_chart_opt']['default_show_ago'] );
-
-		$from_input = date( "Y-m-d H:i", $current_time_5_ago );
-		$to_input   = date( "Y-m-d H:i", $current_time_round );
+		$current_time_x_ago = $current_time - ( 3600 * WP_PRICE_CHART::$option['wp_price_chart_opt']['default_show_ago'] );
+		$from_input = date( "Y-m-d H:i", $current_time_x_ago );
+		$to_input   = date( "Y-m-d H:i", $current_time );
 		if ( isset( $_GET['to-date'] ) and isset( $_GET['from-date'] ) and Helper::validateDate( $_GET['from-date'], "Y-m-d H:i" ) and Helper::validateDate( $_GET['to-date'], "Y-m-d H:i" ) ) {
 			$from_input = $_GET['from-date'];
 			$to_input   = $_GET['to-date'];
-
 			$current_time = strtotime( $to_input );
-
-			// Round Hour
-			$current_time_round = strtotime( date( 'Y-m-d H:00:00', $current_time ) );
-
-			// get 5 ago
-			$current_time_5_ago = strtotime( $from_input );
+			$current_time_x_ago = strtotime( $from_input );
 		}
 
 		// Start content
