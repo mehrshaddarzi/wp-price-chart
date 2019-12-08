@@ -17,7 +17,7 @@ class Admin {
 		/*
 		 * Set Page slug Admin
 		 */
-		//self::$admin_page_slug = 'wp-admin';
+		self::$admin_page_slug = 'wp-price-chart';
 		/*
 		 * Setup Admin Menu
 		 */
@@ -74,17 +74,16 @@ class Admin {
 	 * Set Admin Menu
 	 */
 	public function admin_menu() {
-		//add_menu_page( __( 'wp-price-chart', 'wp-price-chart' ), __( 'wp-price-chart', 'wp-price-chart' ), 'manage_options', self::$admin_page_slug, array( $this, 'admin_page' ), 'dashicons-cart', 8 );
+		add_menu_page( __( 'Price Chart', 'wp-price-chart' ), __( 'Price Chart', 'wp-price-chart' ), 'manage_options', self::$admin_page_slug, array( Settings::instance(), 'setting_page' ), 'dashicons-chart-area', 90 );
 		//add_submenu_page( self::$admin_page_slug, __( 'order', 'wp-price-chart' ), __( 'order', 'wp-price-chart' ), 'manage_options', self::$admin_page_slug, array( $this, 'admin_page' ) );
-		add_submenu_page( 'options-general.php', __( 'Price Chart', 'wp-price-chart' ), __( 'Price Chart', 'wp-price-chart' ), 'manage_options', 'wp_price_chart_option', array( Settings::instance(), 'setting_page' ) );
+		//add_submenu_page( 'options-general.php', __( 'Price Chart', 'wp-price-chart' ), __( 'Price Chart', 'wp-price-chart' ), 'manage_options', 'wp_price_chart_option', array( Settings::instance(), 'setting_page' ) );
 	}
 
 	/*
 	 * Admin Page
 	 */
 	public function admin_page() {
-		$simple_text = 'Hi';
-		require_once WP_PRICE_CHART::$plugin_path . '/inc/admin/views/default.php';
+		//$simple_text = 'Hi';
+		//require_once WP_PRICE_CHART::$plugin_path . '/inc/admin/views/default.php';
 	}
-
 }

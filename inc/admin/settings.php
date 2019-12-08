@@ -57,66 +57,30 @@ class Settings {
 	 * Registers settings section and fields
 	 */
 	public function init_option() {
+		global $wpdb;
+
 		$sections = array(
-			/*array(
-				'id'    => 'WP_PRICE_CHART_email_opt',
-				'desc'  => __( 'Basic email settings', 'wp-reviews-insurance' ),
-				'title' => __( 'Email', 'wp-reviews-insurance' )
-			),*/
 			array(
 				'id'    => 'wp_price_chart_opt',
 				'title' => __( 'General', 'wp-reviews-insurance' )
 			),
 		);
 
+		// Get List Symbol
+		$symbol_list = $wpdb->get_results( "SELECT SYMBOL_ID, SYMBOL FROM {$wpdb->prefix}socks_symbol", ARRAY_A );
+		$list        = array();
+		foreach ( $symbol_list as $r ) {
+			$list[ $r['SYMBOL_ID'] ] = $r['SYMBOL'];
+		}
+
 		$fields = array(
-			/*'WP_PRICE_CHART_email_opt'     => array(
-				array(
-					'name'    => 'from_email',
-					'label'   => __( 'From Email', 'wp-reviews-insurance' ),
-					'type'    => 'text',
-					'default' => get_option( 'admin_email' )
-				),
-				array(
-					'name'    => 'from_name',
-					'label'   => __( 'From Name', 'wp-reviews-insurance' ),
-					'type'    => 'text',
-					'default' => get_option( 'blogname' )
-				),
-				array(
-					'name'         => 'email_logo',
-					'label'        => __( 'Email Logo', 'wp-reviews-insurance' ),
-					'type'         => 'file',
-					'button_label' => 'choose logo image'
-				),
-				array(
-					'name'    => 'email_body',
-					'label'   => __( 'Email Body', 'wp-reviews-insurance' ),
-					'type'    => 'wysiwyg',
-					'default' => '<p>Hi, [fullname] </p> For Accept Your Reviews Please Click Bottom Link : <p> [link]</p>',
-					'desc'    => 'Use This Shortcode :<br /> [fullname] : User Name <br /> [link] : Accept email link'
-				),
-				array(
-					'name'    => 'email_footer',
-					'label'   => __( 'Email Footer Text', 'wp-reviews-insurance' ),
-					'type'    => 'wysiwyg',
-					'default' => 'All rights reserved',
-				)
-			),*/
 			'wp_price_chart_opt' => array(
 				array(
-					'name'    => 'update_time',
-					'label'   => __( 'Update Time (Minute)', 'wp-reviews-insurance' ),
-					'type'    => 'text',
-					'default' => '15',
-					'desc'    => '',
-				),
-				array(
-					'name'    => 'chart_label_name',
-					'label'   => __( 'Label Name', 'wp-reviews-insurance' ),
-					'type'    => 'text',
-					'default' => 'label',
-					'desc'    => '',
+					'name'    => 'default_symbol',
+					'label'   => __( 'Default Symbol', 'wedevs' ),
+					'desc'    => __( 'Use [price-chart] ShortCode in WordPress', 'wedevs' ),
+					'type'    => 'select',
+					'options' => $list
 				),
 				array(
 					'name'    => 'chart_height',

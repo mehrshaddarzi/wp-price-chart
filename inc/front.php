@@ -60,6 +60,7 @@ class Front {
 	 * @return string
 	 */
 	public function wp_price_chart( $atts ) {
+		global $wpdb;
 
 		// Load Chart Js
 		wp_enqueue_style( 'chart-js' );
@@ -72,15 +73,29 @@ class Front {
 		// native
 		wp_enqueue_script( self::$asset_name );
 
+		// Symbol
+		$opt                 = get_option( 'wp_price_chart_opt' );
+		$default_symbol      = $opt['default_symbol'];
+		$default_symbol_name = '';
+		if ( isset( $_GET['symbol'] ) and ! empty( $_GET['symbol'] ) and $_GET['symbol'] > 0 ) {
+			$default_symbol = esc_html( $_GET['symbol'] );
+		}
+		$symbol_list = $wpdb->get_results( "SELECT SYMBOL_ID, SYMBOL FROM {$wpdb->prefix}socks_symbol", ARRAY_A );
+		foreach ( $symbol_list as $r ) {
+			if ( $r['SYMBOL_ID'] == $default_symbol ) {
+				$default_symbol_name = $r['SYMBOL'];
+			}
+		}
+
 		// Get From and to
-		$current_time = current_time( 'timestamp' );
+		$current_time       = current_time( 'timestamp' );
 		$current_time_x_ago = $current_time - ( 3600 * WP_PRICE_CHART::$option['wp_price_chart_opt']['default_show_ago'] );
-		$from_input = date( "Y-m-d H:i", $current_time_x_ago );
-		$to_input   = date( "Y-m-d H:i", $current_time );
+		$from_input         = date( "Y-m-d H:i", $current_time_x_ago );
+		$to_input           = date( "Y-m-d H:i", $current_time );
 		if ( isset( $_GET['to-date'] ) and isset( $_GET['from-date'] ) and Helper::validateDate( $_GET['from-date'], "Y-m-d H:i" ) and Helper::validateDate( $_GET['to-date'], "Y-m-d H:i" ) ) {
-			$from_input = $_GET['from-date'];
-			$to_input   = $_GET['to-date'];
-			$current_time = strtotime( $to_input );
+			$from_input         = $_GET['from-date'];
+			$to_input           = $_GET['to-date'];
+			$current_time       = strtotime( $to_input );
 			$current_time_x_ago = strtotime( $from_input );
 		}
 

@@ -59,7 +59,7 @@ class WP_PRICE_CHART {
 	 * @var array
 	 * @status Optional
 	 */
-	public static $option = array( 'wp_price_chart_email_opt', 'wp_price_chart_opt' );
+	public static $option = array( 'wp_price_chart_opt' );
 
 	/*
 	|--------------------------------------------------------------------------
@@ -69,11 +69,11 @@ class WP_PRICE_CHART {
 	| The service providers listed here will be automatically loaded on the request to your Plugin.
 	*/
 	public static $providers = array(
-		'admin\Settings',
-		'admin\Admin',
-		'Front',
-		'Ajax',
-		'core\\Utility'
+		//'admin\Settings',
+		//'admin\Admin',
+		//'Front',
+		//'Ajax',
+		//'core\\Utility'
 	);
 
 	/**
@@ -112,8 +112,8 @@ class WP_PRICE_CHART {
 	 * Access this plugin’s working instance
 	 *
 	 * @wp-hook plugins_loaded
-	 * @since   2012.09.13
 	 * @return  object of this class
+	 * @since   2012.09.13
 	 */
 	public static function instance() {
 		null === self::$_instance and self::$_instance = new self;
@@ -205,16 +205,18 @@ class WP_PRICE_CHART {
 		/*
 		 * autoload plugin files
 		 */
-		include_once dirname( __FILE__ ) . '/vendor/autoload.php';
+		include_once dirname( __FILE__ ) . '/inc/helper.php';
+		include_once dirname( __FILE__ ) . '/inc/core/settingapi.php';
+		include_once dirname( __FILE__ ) . '/inc/admin/admin.php';
+		include_once dirname( __FILE__ ) . '/inc/admin/settings.php';
+		include_once dirname( __FILE__ ) . '/inc/front.php';
 
 		/*
 		 * Load List Of classes
 		 */
-		foreach ( self::$providers as $class ) {
-			$class_object = '\WP_PRICE_CHART\\' . $class;
-			new $class_object;
-		}
-
+		new WP_PRICE_CHART\admin\Settings();
+		new WP_PRICE_CHART\admin\Admin();
+		new WP_PRICE_CHART\Front();
 	}
 
 	/**
@@ -228,23 +230,23 @@ class WP_PRICE_CHART {
 		/*
 		 * Activation Plugin Hook
 		 */
-		register_activation_hook( __FILE__, array( '\WP_PRICE_CHART\config\install', 'run_install' ) );
+		//register_activation_hook( __FILE__, array( '\WP_PRICE_CHART\config\install', 'run_install' ) );
 
 		/*
 		 * Uninstall Plugin Hook
 		 */
-		register_deactivation_hook( __FILE__, array( '\WP_PRICE_CHART\config\uninstall', 'run_uninstall' ) );
+		//register_deactivation_hook( __FILE__, array( '\WP_PRICE_CHART\config\uninstall', 'run_uninstall' ) );
 
 		/*
 		 * Load i18n
 		 */
 		if ( self::$use_i18n === true ) {
-			new \WP_PRICE_CHART\config\i18n( 'wp-price-chart' );
+			//new \WP_PRICE_CHART\config\i18n( 'wp-price-chart' );
 		}
 
 		//Check $ENVIRONMENT Mode
 		if ( self::$ENVIRONMENT == "development" ) {
-			new \WP_PRICE_CHART\core\debug();
+			//new \WP_PRICE_CHART\core\debug();
 		}
 
 	}
