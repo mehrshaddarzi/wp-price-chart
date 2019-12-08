@@ -3,7 +3,7 @@
  * Plugin Name: Wp Price Chart
  * Description: A Plugin For Show Price chart
  * Plugin URI:  https://site.com
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      Mehrshad Darzi
  * Author URI:  https://site.com
  * License:     MIT
